@@ -8,7 +8,7 @@ export class Institution {
     @Column({
         type: "varchar",
     })
-    firstName: string;
+    name: string;
 
     @Column("varchar")
     password: string;

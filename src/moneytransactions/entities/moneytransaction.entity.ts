@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Account } from "src/accounts/entities/account.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Moneytransaction {
@@ -23,11 +24,13 @@ export class Moneytransaction {
 
     @Column({
         type: "boolean",
+        default: false
     })
     isCanceled: boolean;
-    /* @ManyToOne(type => Account, account  => account.debitMoneyTransactions)
-    debitedAccount: Account; */
 
-    /* @ManyToOne(type => Account, account  => account.creditMoneyTransactions)
-    creditedAccount: Account; */
+    /* @ManyToOne(type => Account, account  => account.debitMoneytransactions)
+    debitedaccount: Account;
+
+    @ManyToOne(type => Account, account  => account.creditMoneytransactions)
+    creditedaccount: Account; */
 }

@@ -1,4 +1,4 @@
-//import { Account } from "src/accounts/entities/account.entity";
+import { Account } from "src/accounts/entities/account.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -32,6 +32,6 @@ export class User {
     })
     age: number;
 
-    /* @OneToMany(type => Account, account => account.user)
-    accounts: Account[] */
+    @OneToMany(type => Account, account => account.user)
+    accounts: Account[]
 }
