@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-
+const bcrypt = require('bcrypt');
 @Injectable()
 export class UsersService {
   constructor(
@@ -21,26 +21,36 @@ export class UsersService {
     }
   }
 
-  createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    /* const user = await this.usersRepository.findOne(createUserDto.email);
+    if (user){
+      throw new NotAcceptableException();
+    } */
+
     const newUser = this.usersRepository.create(createUserDto);
 
-    return this.usersRepository.save(newUser);
+    await bcrypt.hash(newUser.password, 10).then((hash) => {
+      newUser.password = hash;
+    });
+
+    await this.usersRepository.save(newUser);
+
+    delete newUser.password;
+    return newUser;
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-
-    try{
+    try {
       const user = await this.getOneById(id);
-      const updatedUser = {...user, ...updateUserDto};
+      const updatedUser = { ...user, ...updateUserDto };
       return this.usersRepository.save(updatedUser);
-    } catch{
+    } catch {
       throw new NotFoundException();
     }
-    
+
     /* if (updateUserDto.password) {
       user.password = updateUserDto.password;
     } */
-
   }
   /* create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
