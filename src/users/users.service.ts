@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -28,24 +28,19 @@ export class UsersService {
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.getOneById(id);
-    if (updateUserDto.firstName) {
-      user.firstName = updateUserDto.firstName;
-    }
-    if (updateUserDto.lastName) {
-      user.lastName = updateUserDto.lastName;
-    }
-    if (updateUserDto.email) {
-      user.email = updateUserDto.email;
-    }
-    if (updateUserDto.password) {
-      user.password = updateUserDto.password;
-    }
-    if (updateUserDto.age) {
-      user.age = updateUserDto.age;
-    }
 
-    return this.usersRepository.save(user);
+    try{
+      const user = await this.getOneById(id);
+      const updatedUser = {...user, ...updateUserDto};
+      return this.usersRepository.save(updatedUser);
+    } catch{
+      throw new NotFoundException();
+    }
+    
+    /* if (updateUserDto.password) {
+      user.password = updateUserDto.password;
+    } */
+
   }
   /* create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
