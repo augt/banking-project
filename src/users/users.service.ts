@@ -11,6 +11,10 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
+  async findOneByEmail(email: string): Promise<User | undefined> {
+    return this.usersRepository.findOne(email);
+  }
+
   async getOneById(id: string): Promise<User> {
     try {
       const user = await this.usersRepository.findOneOrFail(id);
@@ -26,12 +30,13 @@ export class UsersService {
     if (user){
       throw new NotAcceptableException();
     } */
+    /* const user = await this.usersRepository.findOne(email);
+    console.log(email); */
+    const newUser = await this.usersRepository.create(createUserDto);
 
-    const newUser = this.usersRepository.create(createUserDto);
-
-    await bcrypt.hash(newUser.password, 10).then((hash) => {
+    /* await bcrypt.hash(newUser.password, 10).then((hash) => {
       newUser.password = hash;
-    });
+    }); */
 
     await this.usersRepository.save(newUser);
 
