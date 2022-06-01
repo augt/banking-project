@@ -1,4 +1,8 @@
-import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,7 +16,7 @@ export class UsersService {
   ) {}
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    return this.usersRepository.findOne({email: email});
+    return this.usersRepository.findOne({ email: email });
   }
 
   async getOneById(id: string): Promise<User> {
@@ -26,12 +30,11 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    
     const newUser = await this.usersRepository.create(createUserDto);
 
-    /* await bcrypt.hash(newUser.password, 10).then((hash) => {
+    await bcrypt.hash(newUser.password, 10).then((hash) => {
       newUser.password = hash;
-    }); */
+    });
 
     await this.usersRepository.save(newUser);
 
