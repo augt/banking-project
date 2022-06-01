@@ -14,11 +14,11 @@ export class UsersController {
       return newUser;
   }
   
-  @Get('login')
-  async login(@Body() email: string): Promise<any> {
-    const user = await this.usersService.findOneByEmail(email)
+  /* @Get('login')
+  async login(@Body() body): Promise<any> {
+    const user = await this.usersService.findOneByEmail(body.email)
     return user;
-  }
+  } */
 
   @Put(':id')
   async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User>{

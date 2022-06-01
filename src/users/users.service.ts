@@ -12,7 +12,7 @@ export class UsersService {
   ) {}
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    return this.usersRepository.findOne(email);
+    return this.usersRepository.findOne({email: email});
   }
 
   async getOneById(id: string): Promise<User> {
@@ -26,12 +26,7 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    /* const user = await this.usersRepository.findOne(createUserDto.email);
-    if (user){
-      throw new NotAcceptableException();
-    } */
-    /* const user = await this.usersRepository.findOne(email);
-    console.log(email); */
+    
     const newUser = await this.usersRepository.create(createUserDto);
 
     /* await bcrypt.hash(newUser.password, 10).then((hash) => {
