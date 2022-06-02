@@ -17,6 +17,12 @@ export class AccountsController {
   }
   
   @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async findOneAccount(@Request() req, @Param('id') id: string): Promise<Account> {
+    return this.accountsService.getOneById(req, id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAllAccounts(@Request() req): Promise<Account[]> {
     return this.accountsService.findAll(req);

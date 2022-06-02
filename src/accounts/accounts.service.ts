@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -19,10 +19,16 @@ export class AccountsService {
     return this.accountsRepository.save(newAccount);
   }
 
-  async getOnebyId(id: number): Promise<Account> {
+  async getOneById(req, id: string): Promise<Account> {
     try {
-      const account = this.accountsRepository.findOneOrFail(id, {relations:['debitMoneytransactions','creditMoneytransactions']});
-        return account;
+      const account = await this.accountsRepository.findOneOrFail(id, {
+        relations: ['user','debitMoneytransactions'],
+      });
+      if (account.user.id !== req.user.id) {
+        throw new UnauthorizedException();
+      }
+      delete account.user;
+      return account;
     } catch (err) {
       //handle error
       throw err;
@@ -30,9 +36,8 @@ export class AccountsService {
   }
 
   findAll(req): Promise<Account[]> {
-    return this.accountsRepository.find({where:{user:req.user.id}}); 
+    return this.accountsRepository.find({ where: { user: req.user.id } });
   }
-
 }
 
 /* create(createAccountDto: CreateAccountDto) {

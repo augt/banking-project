@@ -1,5 +1,5 @@
 import { Account } from "src/accounts/entities/account.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Moneytransaction {
@@ -29,8 +29,10 @@ export class Moneytransaction {
     isCanceled: boolean;
 
     /* @ManyToOne(type => Account, account  => account.debitMoneytransactions)
-    debitedaccount: Account;
+    @JoinColumn()
+    debitedAccount: Account;
 
     @ManyToOne(type => Account, account  => account.creditMoneytransactions)
-    creditedaccount: Account; */
+    @JoinColumn()
+    creditedAccount: Account; */
 }
