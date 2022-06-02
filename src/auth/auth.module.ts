@@ -4,9 +4,10 @@ import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
+import { InstitutionsModule } from 'src/institutions/institutions.module';
 
 @Module({
-  imports: [UsersModule, PassportModule, JwtModule.register({
+  imports: [UsersModule,InstitutionsModule, PassportModule, JwtModule.register({
     secret: 'SECRET', // should be in env variables
     signOptions:{expiresIn: '86400s'}
   })],

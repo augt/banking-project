@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Request, UseGuards } from '@nestjs/common';
 import { InstitutionsService } from './institutions.service';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { Institution } from './entities/institution.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('institutions')
 export class InstitutionsController {
@@ -14,6 +15,7 @@ export class InstitutionsController {
       return newInstitution;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updateInstitution(@Param('id') id: string, @Body() updateInstitutionDto: UpdateInstitutionDto, @Request() req) {
     const institution = await this.institutionsService.updateInstitution(id, updateInstitutionDto, req);

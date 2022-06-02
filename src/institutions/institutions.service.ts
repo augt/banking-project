@@ -48,18 +48,18 @@ export class InstitutionsService {
     req,
   ): Promise<Institution> {
     try {
-      /* if (req.user.id !== id) {
+       if (req.user.id !== id) {
         throw new BadRequestException();
-      } */
+      }
       const institution = await this.getOneById(id);
 
       const updatedInstitution = { ...institution, ...updateInstitutionDto };
 
       return this.institutionsRepository.save(updatedInstitution);
     } catch {
-      /* if (req.user.id !== id) {
+       if (req.user.id !== id) {
         throw new UnauthorizedException();
-      } */
+      }
       throw new NotFoundException();
     }
   }
