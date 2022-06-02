@@ -9,7 +9,7 @@ export class AppController {
   constructor(private readonly authService: AuthService) {}
 
   
-  @Post('login')
+  @Post('/users/login')
   login(@Request() req, @Body() body) {
     return this.authService.login(body);
   }

@@ -1,7 +1,9 @@
 import {
+  BadRequestException,
   Injectable,
   NotAcceptableException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -42,12 +44,27 @@ export class UsersService {
     return newUser;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUser(id: string, updateUserDto: UpdateUserDto, req): Promise<User> {
     try {
+      if (req.user.id!==id){
+        throw new BadRequestException()
+      }
       const user = await this.getOneById(id);
+
+      if (updateUserDto.password) {
+        await bcrypt.hash(updateUserDto.password, 10).then((hash) => {
+          updateUserDto.password = hash;
+        });
+      }
+
       const updatedUser = { ...user, ...updateUserDto };
+
+      
       return this.usersRepository.save(updatedUser);
     } catch {
+      if (req.user.id!==id){
+        throw new UnauthorizedException();
+      };
       throw new NotFoundException();
     }
 
