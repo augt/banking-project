@@ -12,15 +12,28 @@ export class AccountsService {
   ) {}
 
   async createAccount(req): Promise<Account> {
-
-    const newAccount = await this.accountsRepository.create({user:req.user.id});
+    const newAccount = await this.accountsRepository.create({
+      user: req.user.id,
+    });
 
     return this.accountsRepository.save(newAccount);
   }
 
-  
-}
+  async getOnebyId(id: number): Promise<Account> {
+    try {
+      const account = this.accountsRepository.findOneOrFail(id, {relations:['debitMoneytransactions','creditMoneytransactions']});
+        return account;
+    } catch (err) {
+      //handle error
+      throw err;
+    }
+  }
 
+  findAll(req): Promise<Account[]> {
+    return this.accountsRepository.find({where:{user:req.user.id}}); 
+  }
+
+}
 
 /* create(createAccountDto: CreateAccountDto) {
     return 'This action adds a new account';

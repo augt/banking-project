@@ -16,6 +16,12 @@ export class AccountsController {
       return newAccount;
   }
   
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async findAllAccounts(@Request() req): Promise<Account[]> {
+    return this.accountsService.findAll(req);
+  }
+  
 }
 
 /* @Post()
