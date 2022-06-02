@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Request } from '@nestjs/common';
 import { InstitutionsService } from './institutions.service';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
@@ -9,9 +9,15 @@ export class InstitutionsController {
   constructor(private readonly institutionsService: InstitutionsService) {}
 
   @Post('signup')
-  async createUser(@Body() body: CreateInstitutionDto): Promise<Institution> {
+  async createInstitution(@Body() body: CreateInstitutionDto): Promise<Institution> {
      const newInstitution = await this.institutionsService.createInstitution(body);
       return newInstitution;
+  }
+
+  @Put(':id')
+  async updateInstitution(@Param('id') id: string, @Body() updateInstitutionDto: UpdateInstitutionDto, @Request() req) {
+    const institution = await this.institutionsService.updateInstitution(id, updateInstitutionDto, req);
+    return {msg: "institution updated"}
   }
   
 }

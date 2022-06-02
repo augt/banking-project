@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
@@ -30,6 +30,38 @@ export class InstitutionsService {
       this.institutionsRepository.save(newInstitutionHashedKey);
     });
     return newInstitution;
+  }
+
+  async getOneById(id: string): Promise<Institution> {
+    try {
+      const institution = await this.institutionsRepository.findOneOrFail(id);
+      return institution;
+    } catch (err) {
+      //handle error
+      throw err;
+    }
+  }
+
+  async updateInstitution(
+    id: string,
+    updateInstitutionDto: UpdateInstitutionDto,
+    req,
+  ): Promise<Institution> {
+    try {
+      /* if (req.user.id !== id) {
+        throw new BadRequestException();
+      } */
+      const institution = await this.getOneById(id);
+
+      const updatedInstitution = { ...institution, ...updateInstitutionDto };
+
+      return this.institutionsRepository.save(updatedInstitution);
+    } catch {
+      /* if (req.user.id !== id) {
+        throw new UnauthorizedException();
+      } */
+      throw new NotFoundException();
+    }
   }
 }
 
