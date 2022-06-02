@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -44,10 +43,14 @@ export class UsersService {
     return newUser;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto, req): Promise<User> {
+  async updateUser(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    req,
+  ): Promise<User> {
     try {
-      if (req.user.id!==id){
-        throw new BadRequestException()
+      if (req.user.id !== id) {
+        throw new BadRequestException();
       }
       const user = await this.getOneById(id);
 
@@ -59,20 +62,19 @@ export class UsersService {
 
       const updatedUser = { ...user, ...updateUserDto };
 
-      
       return this.usersRepository.save(updatedUser);
     } catch {
-      if (req.user.id!==id){
+      if (req.user.id !== id) {
         throw new UnauthorizedException();
-      };
+      }
       throw new NotFoundException();
     }
-
-    /* if (updateUserDto.password) {
-      user.password = updateUserDto.password;
-    } */
   }
-  /* create(createUserDto: CreateUserDto) {
+  
+}
+
+
+/* create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
 
@@ -91,4 +93,3 @@ export class UsersService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   } */
-}

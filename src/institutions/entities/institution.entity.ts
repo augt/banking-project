@@ -11,6 +11,6 @@ export class Institution {
     name: string;
 
     @Column("varchar")
-    password: string;
+    privateKey: string;
 
 }

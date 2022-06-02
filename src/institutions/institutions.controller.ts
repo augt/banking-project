@@ -2,12 +2,23 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { InstitutionsService } from './institutions.service';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
+import { Institution } from './entities/institution.entity';
 
 @Controller('institutions')
 export class InstitutionsController {
   constructor(private readonly institutionsService: InstitutionsService) {}
 
-  @Post()
+  @Post('signup')
+  async createUser(@Body() body: CreateInstitutionDto): Promise<Institution> {
+     const newInstitution = await this.institutionsService.createInstitution(body);
+      return newInstitution;
+  }
+  
+}
+
+
+
+/* @Post()
   create(@Body() createInstitutionDto: CreateInstitutionDto) {
     return this.institutionsService.create(createInstitutionDto);
   }
@@ -30,5 +41,4 @@ export class InstitutionsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.institutionsService.remove(+id);
-  }
-}
+  } */
