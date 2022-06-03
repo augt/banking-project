@@ -1,13 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
 import { MoneytransactionsService } from './moneytransactions.service';
 import { CreateMoneytransactionDto } from './dto/create-moneytransaction.dto';
 import { UpdateMoneytransactionDto } from './dto/update-moneytransaction.dto';
+import { Moneytransaction } from './entities/moneytransaction.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('moneytransactions')
 export class MoneytransactionsController {
   constructor(private readonly moneytransactionsService: MoneytransactionsService) {}
 
-  @Post()
+  @UseGuards(JwtAuthGuard)
+  @Post('create')
+  async createUser(@Request() req, @Body() body: CreateMoneytransactionDto): Promise<Moneytransaction> {
+     const newMoneytransaction = await this.moneytransactionsService.createMoneytransaction(req, body);
+      return newMoneytransaction;
+  }
+  
+}
+/* @Post()
   create(@Body() createMoneytransactionDto: CreateMoneytransactionDto) {
     return this.moneytransactionsService.create(createMoneytransactionDto);
   }
@@ -30,5 +40,4 @@ export class MoneytransactionsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.moneytransactionsService.remove(+id);
-  }
-}
+  } */

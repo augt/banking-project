@@ -1,10 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateMoneytransactionDto } from './dto/create-moneytransaction.dto';
 import { UpdateMoneytransactionDto } from './dto/update-moneytransaction.dto';
+import { Moneytransaction } from './entities/moneytransaction.entity';
 
 @Injectable()
 export class MoneytransactionsService {
-  create(createMoneytransactionDto: CreateMoneytransactionDto) {
+  constructor(
+    @InjectRepository(Moneytransaction)
+    private moneytransactionsRepository: Repository<Moneytransaction>,
+  ) {}
+
+  async createMoneytransaction(
+    req,
+    createMoneytransactionDto: CreateMoneytransactionDto,
+  ): Promise<Moneytransaction> {
+    console.log(createMoneytransactionDto)
+    const newMoneytransaction = await this.moneytransactionsRepository.create({
+      orderer: req.user.id,
+      debitedAccount:{id:createMoneytransactionDto.debitedAccountId},
+      creditedAccount:{id:createMoneytransactionDto.creditedAccountId},
+      amount:createMoneytransactionDto.amount
+    });
+
+    await this.moneytransactionsRepository.save(newMoneytransaction);
+
+    return newMoneytransaction;
+  }
+}
+/* create(createMoneytransactionDto: CreateMoneytransactionDto) {
     return 'This action adds a new moneytransaction';
   }
 
@@ -22,5 +47,4 @@ export class MoneytransactionsService {
 
   remove(id: number) {
     return `This action removes a #${id} moneytransaction`;
-  }
-}
+  } */

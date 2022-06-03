@@ -10,16 +10,16 @@ export class Moneytransaction {
     @Column("uuid")
     orderer: string;
 
-    @Column("uuid")
+    /* @Column("uuid")
     debitedAccount: string;
 
     @Column("uuid")
-    creditedAccount: string;
+    creditedAccount: string; */
 
     @Column({ type: "decimal", precision: 10, scale: 2 })
     amount: string;
 
-    @Column('timestamp')
+    @Column({type:'timestamptz', default: () => "CURRENT_TIMESTAMP"})
     createdAt: string;
 
     @Column({
@@ -28,11 +28,9 @@ export class Moneytransaction {
     })
     isCanceled: boolean;
 
-    /* @ManyToOne(type => Account, account  => account.debitMoneytransactions)
-    @JoinColumn()
+    @ManyToOne(type => Account, account  => account.debitMoneytransactions)
     debitedAccount: Account;
 
     @ManyToOne(type => Account, account  => account.creditMoneytransactions)
-    @JoinColumn()
-    creditedAccount: Account; */
+    creditedAccount: Account;
 }

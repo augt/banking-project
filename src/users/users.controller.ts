@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, Request, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -14,11 +14,15 @@ export class UsersController {
      const newUser = await this.usersService.createUser(body);
       return newUser;
   }
-  
-  /* @Get('login')
-  async login(@Body() body): Promise<any> {
-    const user = await this.usersService.findOneByEmail(body.email)
-    return user;
+
+  /* @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getOneUser(@Param('id') id: string, @Request() req) {
+    const user = await this.usersService.getOneById(id);
+    if (req.user.id!==user.id){
+      throw new UnauthorizedException();
+    }
+    return user
   } */
 
   @UseGuards(JwtAuthGuard)
