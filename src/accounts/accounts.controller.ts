@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -19,7 +19,12 @@ export class AccountsController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOneAccount(@Request() req, @Param('id') id: string): Promise<Account> {
-    return this.accountsService.getOneById(req, id);
+    const account = await this.accountsService.getOneById(id);
+    if (account.user.id !== req.user.id) {
+      throw new UnauthorizedException();
+    }
+    delete account.user;
+    return account ;
   }
 
   @UseGuards(JwtAuthGuard)

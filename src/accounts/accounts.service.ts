@@ -19,16 +19,11 @@ export class AccountsService {
     return this.accountsRepository.save(newAccount);
   }
 
-  async getOneById(req, id: string): Promise<Account> {
-    console.log(req.user.id)
+  async getOneById(id: string): Promise<Account> {
     try {
       const account = await this.accountsRepository.findOneOrFail(id, {
         relations: ['user','debitMoneytransactions', 'creditMoneytransactions']
       });
-      if (account.user.id !== req.user.id) {
-        throw new UnauthorizedException();
-      }
-      delete account.user;
       return account;
     } catch (err) {
       //handle error

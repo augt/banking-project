@@ -19,9 +19,6 @@ export class UsersController {
   @Get(':id')
   async getOneUser(@Param('id') id: string, @Request() req) {
     const user = await this.usersService.getOneById(id);
-    if (req.user.id!==user.id){
-      throw new UnauthorizedException();
-    }
     return user
   } */
 

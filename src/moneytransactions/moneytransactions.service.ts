@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AccountsService } from 'src/accounts/accounts.service';
+import { Account } from 'src/accounts/entities/account.entity';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateMoneytransactionDto } from './dto/create-moneytransaction.dto';
 import { UpdateMoneytransactionDto } from './dto/update-moneytransaction.dto';
@@ -10,19 +14,35 @@ export class MoneytransactionsService {
   constructor(
     @InjectRepository(Moneytransaction)
     private moneytransactionsRepository: Repository<Moneytransaction>,
+    private accountsService: AccountsService,
+    private usersService: UsersService,
   ) {}
 
   async createMoneytransaction(
     req,
     createMoneytransactionDto: CreateMoneytransactionDto,
   ): Promise<Moneytransaction> {
-    console.log(createMoneytransactionDto)
     const newMoneytransaction = await this.moneytransactionsRepository.create({
       orderer: req.user.id,
       debitedAccount:{id:createMoneytransactionDto.debitedAccountId},
       creditedAccount:{id:createMoneytransactionDto.creditedAccountId},
       amount:createMoneytransactionDto.amount
     });
+    const account:Account = await this.accountsService.getOneById(newMoneytransaction.debitedAccount.id);
+    if (!account){
+      throw new BadRequestException();
+    }
+    if (account.isBlocked===true){
+      throw new UnauthorizedException();
+    }
+
+    const user:User|undefined = await this.usersService.getOneById(req.user.id);
+
+    if (user && account.user.id!==req.user.id){
+      throw new UnauthorizedException();
+    }
+
+
 
     await this.moneytransactionsRepository.save(newMoneytransaction);
 

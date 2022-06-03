@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsPositive, IsUUID } from "class-validator";
+import { IsDecimal, IsNotEmpty, IsNumber, IsPositive, IsUUID } from "class-validator";
 
 export class CreateMoneytransactionDto {
 
