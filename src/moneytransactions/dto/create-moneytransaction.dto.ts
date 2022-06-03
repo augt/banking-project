@@ -1,4 +1,4 @@
-import { IsDecimal, IsNotEmpty, IsNumber, IsPositive, IsUUID } from "class-validator";
+import { IsDecimal, IsNotEmpty, IsNumber, IsPositive, IsUUID, Min } from "class-validator";
 
 export class CreateMoneytransactionDto {
 
@@ -12,6 +12,6 @@ export class CreateMoneytransactionDto {
 
     @IsNotEmpty()
     @IsNumber()
-    @IsPositive()
+    @Min(0)
     amount: string;
 }

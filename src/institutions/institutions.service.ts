@@ -34,7 +34,7 @@ export class InstitutionsService {
 
   async getOneById(id: string): Promise<Institution> {
     try {
-      const institution = await this.institutionsRepository.findOneOrFail(id);
+      const institution = await this.institutionsRepository.findOne(id);
       return institution;
     } catch (err) {
       //handle error
@@ -49,7 +49,7 @@ export class InstitutionsService {
   ): Promise<Institution> {
     try {
        if (req.user.id !== id) {
-        throw new BadRequestException();
+        throw new UnauthorizedException();
       }
       const institution = await this.getOneById(id);
 

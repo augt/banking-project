@@ -56,7 +56,7 @@ export class UsersService {
   ): Promise<User> {
     try {
       if (req.user.id !== id) {
-        throw new BadRequestException();
+        throw new UnauthorizedException();
       }
       const user = await this.getOneById(id);
 
