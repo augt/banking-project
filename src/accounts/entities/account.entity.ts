@@ -13,9 +13,6 @@ export class Account {
     })
     isBlocked: boolean;
 
-    @Column({ type: "decimal", precision: 10, scale: 2, default: 0.0 })
-    balance: string;
-
     @ManyToOne(type => User, user => user.accounts)
     user: User;
 
