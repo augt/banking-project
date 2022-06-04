@@ -9,6 +9,7 @@ import {
   Request,
   UseGuards,
   UnauthorizedException,
+  Put,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AccountsService } from './accounts.service';
@@ -44,6 +45,7 @@ export class AccountsController {
 
     const balance = await this.accountsService.calculateAccountBalance(account);
     const fixedPointBalance = balance.toFixed(2);
+
     return {
       your_account_id: account.id,
       balance: fixedPointBalance,
@@ -70,5 +72,18 @@ export class AccountsController {
     }
 
     return accountsListWithBalance;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('block/:id')
+  async blockAccount(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
+    const updatedAccount = await this.accountsService.blockAccount(req, id, updateAccountDto);
+    delete updatedAccount.user
+
+    return updatedAccount
   }
 }

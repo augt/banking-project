@@ -32,13 +32,16 @@ export class MoneytransactionsService {
       creditedAccount: { id: createMoneytransactionDto.creditedAccountId },
       amount: createMoneytransactionDto.amount,
     });
-    const account: Account = await this.accountsService.getOneById(
+    const debitedAccount: Account = await this.accountsService.getOneById(
       newMoneytransaction.debitedAccount.id,
     );
-    if (!account) {
+    const creditedAccount: Account = await this.accountsService.getOneById(
+      newMoneytransaction.creditedAccount.id,
+    );
+    if (!debitedAccount || !creditedAccount) {
       throw new BadRequestException();
     }
-    if (account.isBlocked === true) {
+    if (debitedAccount.isBlocked === true || creditedAccount.isBlocked=== true) {
       throw new UnauthorizedException();
     }
 
@@ -46,18 +49,18 @@ export class MoneytransactionsService {
       req.user.id,
     );
 
-    if (user && account.user.id !== req.user.id) {
+    if (user && debitedAccount.user.id !== req.user.id) {
       throw new UnauthorizedException();
     }
     const formerBalance = await this.accountsService.calculateAccountBalance(
-      account,
+      debitedAccount,
     );
     const floatTransactionAmount = parseFloat(newMoneytransaction.amount);
     const expectedNewBalance = formerBalance - floatTransactionAmount;
 
-    /* if (expectedNewBalance < 0) {
+    if (expectedNewBalance < 0) {
       throw new UnauthorizedException();
-    } */
+    }
     await this.moneytransactionsRepository.save(newMoneytransaction);
 
     return newMoneytransaction;

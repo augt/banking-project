@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JoinColumn, Repository } from 'typeorm';
+import { Moneytransaction } from 'src/moneytransactions/entities/moneytransaction.entity';
+import { In, JoinColumn, NotBrackets, Repository, Transaction } from 'typeorm';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Account } from './entities/account.entity';
@@ -9,6 +10,8 @@ import { Account } from './entities/account.entity';
 export class AccountsService {
   constructor(
     @InjectRepository(Account) private accountsRepository: Repository<Account>,
+    @InjectRepository(Moneytransaction)
+    private moneytransactionsRepository: Repository<Moneytransaction>,
   ) {}
 
   async createAccount(req): Promise<Account> {
@@ -36,55 +39,99 @@ export class AccountsService {
   }
 
   async findAll(req): Promise<Account[]> {
-    return await this.accountsRepository.createQueryBuilder("account").leftJoinAndSelect("account.debitMoneytransactions","debitMoneytransactions").leftJoinAndSelect("account.creditMoneytransactions","creditMoneytransactions").where("account.user.id = :id", {id:req.user.id}).getMany();
-
+    return await this.accountsRepository
+      .createQueryBuilder('account')
+      .leftJoinAndSelect(
+        'account.debitMoneytransactions',
+        'debitMoneytransactions',
+      )
+      .leftJoinAndSelect(
+        'account.creditMoneytransactions',
+        'creditMoneytransactions',
+      )
+      .where('account.user.id = :id', { id: req.user.id })
+      .getMany();
   }
 
   async calculateAccountBalance(account: Account) {
+    let debitArray = [];
+    let creditArray = [];
 
-    const debitArray: number[] = [];
-    const creditArray: number[] = [];
+    const filteredCreditTransactionsArray =
+      account.creditMoneytransactions.filter(
+        (transaction) => transaction.isCanceled === false,
+      );
+    const filteredDebitTransactionsArray =
+      account.debitMoneytransactions.filter(
+        (transaction) => transaction.isCanceled === false,
+      );
 
-    for (let transaction of account.debitMoneytransactions) {
-      const transactionIndex =
-        account.debitMoneytransactions.indexOf(transaction);
-
-      if (transaction.isCanceled === true) {
-        account.debitMoneytransactions.splice(transactionIndex, 1);
-      }
-      const parsedAmout = parseFloat(transaction.amount);
-      debitArray.push(parsedAmout);
+    for (let creditTransaction of filteredCreditTransactionsArray) {
+      const parsedCreditAmount = parseFloat(creditTransaction.amount);
+      creditArray.push(parsedCreditAmount);
     }
 
-    for (let transaction of account.creditMoneytransactions) {
-      const transactionIndex =
-        account.creditMoneytransactions.indexOf(transaction);
-
-      if (transaction.isCanceled === true) {
-        account.creditMoneytransactions.splice(transactionIndex, 1);
-      }
-
-      const parsedAmout = parseFloat(transaction.amount);
-      creditArray.push(parsedAmout);
+    for (let debitTransaction of filteredDebitTransactionsArray) {
+      const parsedDebitAmount = parseFloat(debitTransaction.amount);
+      debitArray.push(parsedDebitAmount);
     }
+    console.log(creditArray)
+    console.log(debitArray)
     const reducer = (previousValue, currentValue) =>
       previousValue + currentValue;
 
-    let debitSum:number;
-    let creditSum:number;
-    if (debitArray.length===0){
-      debitSum= 0;
-    } else{
+    let debitSum: number;
+    let creditSum: number;
+    if (debitArray.length === 0) {
+      debitSum = 0;
+    } else {
       debitSum = debitArray.reduce(reducer);
     }
-    if (creditArray.length===0){
-      creditSum= 0;
-    } else{
+    if (creditArray.length === 0) {
+      creditSum = 0;
+    } else {
       creditSum = creditArray.reduce(reducer);
     }
 
     const balance = creditSum - debitSum;
 
     return balance;
+  }
+
+  async blockAccount(req, id: string, updateAccountDto): Promise<Account> {
+    const blockDate = new Date(updateAccountDto.blockDate);
+    const delay = Date.now() - blockDate.getTime();
+    if (delay > 259200000) {
+      throw new UnauthorizedException();
+    }
+
+    const account: Account = await this.getOneById(id);
+    if (account.user.id !== req.user.id) {
+      throw new UnauthorizedException();
+    }
+
+    const updatedAccount = { ...account, isBlocked: true };
+
+    const transactionsArray = account.creditMoneytransactions.concat(
+      account.debitMoneytransactions,
+    );
+
+    let transactionsIdArray: number[] = [];
+
+    for (let transaction of transactionsArray) {
+      const transactionTimeStamp = new Date(transaction.createdAt);
+      const transactionAge = Date.now() - transactionTimeStamp.getTime();
+
+      if (transactionTimeStamp >= blockDate) {
+        transactionsIdArray.push(transaction.id);
+      }
+    }
+
+    await this.moneytransactionsRepository.update(
+      { id: In(transactionsIdArray) },
+      { isCanceled: true },
+    );
+
+    return await this.accountsRepository.save(updatedAccount);
   }
 }
