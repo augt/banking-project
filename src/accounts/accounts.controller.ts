@@ -18,13 +18,14 @@ export class AccountsController {
   
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async findOneAccount(@Request() req, @Param('id') id: string): Promise<Account> {
+  async findOneAccount(@Request() req, @Param('id') id: string) {
     const account = await this.accountsService.getOneById(id);
     if (account.user.id !== req.user.id) {
       throw new UnauthorizedException();
     }
-    delete account.user;
-    return account ;
+    const balance = await this.accountsService.calculateAccountBalance(account)
+    const fixedPointBalance = balance.toFixed(2);
+    return {your_account_id: account.id, balance:fixedPointBalance } ;
   }
 
   @UseGuards(JwtAuthGuard)

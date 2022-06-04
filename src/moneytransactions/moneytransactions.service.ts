@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountsService } from 'src/accounts/accounts.service';
 import { Account } from 'src/accounts/entities/account.entity';
@@ -24,26 +28,36 @@ export class MoneytransactionsService {
   ): Promise<Moneytransaction> {
     const newMoneytransaction = await this.moneytransactionsRepository.create({
       orderer: req.user.id,
-      debitedAccount:{id:createMoneytransactionDto.debitedAccountId},
-      creditedAccount:{id:createMoneytransactionDto.creditedAccountId},
-      amount:createMoneytransactionDto.amount
+      debitedAccount: { id: createMoneytransactionDto.debitedAccountId },
+      creditedAccount: { id: createMoneytransactionDto.creditedAccountId },
+      amount: createMoneytransactionDto.amount,
     });
-    const account:Account = await this.accountsService.getOneById(newMoneytransaction.debitedAccount.id);
-    if (!account){
+    const account: Account = await this.accountsService.getOneById(
+      newMoneytransaction.debitedAccount.id,
+    );
+    if (!account) {
       throw new BadRequestException();
     }
-    if (account.isBlocked===true){
+    if (account.isBlocked === true) {
       throw new UnauthorizedException();
     }
 
-    const user:User|undefined = await this.usersService.getOneById(req.user.id);
+    const user: User | undefined = await this.usersService.getOneById(
+      req.user.id,
+    );
 
-    if (user && account.user.id!==req.user.id){
+    if (user && account.user.id !== req.user.id) {
       throw new UnauthorizedException();
     }
+    const formerBalance = await this.accountsService.calculateAccountBalance(
+      account,
+    );
+    const floatTransactionAmount = parseFloat(newMoneytransaction.amount);
+    const expectedNewBalance = formerBalance - floatTransactionAmount;
 
-
-
+    if (expectedNewBalance < 0) {
+      throw new UnauthorizedException();
+    }
     await this.moneytransactionsRepository.save(newMoneytransaction);
 
     return newMoneytransaction;
