@@ -55,9 +55,9 @@ export class MoneytransactionsService {
     const floatTransactionAmount = parseFloat(newMoneytransaction.amount);
     const expectedNewBalance = formerBalance - floatTransactionAmount;
 
-    if (expectedNewBalance < 0) {
+    /* if (expectedNewBalance < 0) {
       throw new UnauthorizedException();
-    }
+    } */
     await this.moneytransactionsRepository.save(newMoneytransaction);
 
     return newMoneytransaction;

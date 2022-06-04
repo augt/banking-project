@@ -34,9 +34,21 @@ export class AccountsController {
     if (account.user.id !== req.user.id) {
       throw new UnauthorizedException();
     }
+    const transactionsArray = account.debitMoneytransactions.concat(
+      account.creditMoneytransactions,
+    );
+    transactionsArray.sort((a, b) => b.id - a.id);
+    if (transactionsArray.length > 30) {
+      transactionsArray.splice(30, transactionsArray.length - 30);
+    }
+
     const balance = await this.accountsService.calculateAccountBalance(account);
     const fixedPointBalance = balance.toFixed(2);
-    return { your_account_id: account.id, balance: fixedPointBalance };
+    return {
+      your_account_id: account.id,
+      balance: fixedPointBalance,
+      transactions_history: transactionsArray,
+    };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -52,7 +64,7 @@ export class AccountsController {
       const fixedPointBalance = balance.toFixed(2);
       const accountInfos = {
         account_id: account.id,
-        balance: fixedPointBalance+"€",
+        balance: fixedPointBalance + '€',
       };
       accountsListWithBalance.push(accountInfos);
     }
@@ -60,28 +72,3 @@ export class AccountsController {
     return accountsListWithBalance;
   }
 }
-
-/* @Post()
-  create(@Body() createAccountDto: CreateAccountDto) {
-    return this.accountsService.create(createAccountDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.accountsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accountsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountsService.update(+id, updateAccountDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.accountsService.remove(+id);
-  } */
