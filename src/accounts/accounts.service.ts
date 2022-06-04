@@ -35,16 +35,12 @@ export class AccountsService {
     }
   }
 
-  findAll(req): Promise<Account[]> {
-    return this.accountsRepository.find({ where: { user: req.user.id } });
+  async findAll(req): Promise<Account[]> {
+    return await this.accountsRepository.createQueryBuilder("account").leftJoinAndSelect("account.debitMoneytransactions","debitMoneytransactions").leftJoinAndSelect("account.creditMoneytransactions","creditMoneytransactions").where("account.user.id = :id", {id:req.user.id}).getMany();
+
   }
 
   async calculateAccountBalance(account: Account) {
-    /* const account = await this.accountsRepository.findOneOrFail(id, {
-      relations: ['debitMoneytransactions', 'creditMoneytransactions'],
-    }); */
-
-    //console.log(account.creditMoneytransactions)
 
     const debitArray: number[] = [];
     const creditArray: number[] = [];
@@ -56,8 +52,6 @@ export class AccountsService {
       if (transaction.isCanceled === true) {
         account.debitMoneytransactions.splice(transactionIndex, 1);
       }
-
-      //console.log(parseFloat(trans).toFixed(2))
       const parsedAmout = parseFloat(transaction.amount);
       debitArray.push(parsedAmout);
     }
@@ -70,16 +64,26 @@ export class AccountsService {
         account.creditMoneytransactions.splice(transactionIndex, 1);
       }
 
-      //console.log(parseFloat(trans).toFixed(2))
       const parsedAmout = parseFloat(transaction.amount);
       creditArray.push(parsedAmout);
     }
     const reducer = (previousValue, currentValue) =>
       previousValue + currentValue;
-    const debitsSum = debitArray.reduce(reducer);
-    const creditSum = creditArray.reduce(reducer);
-    //console.log(debitsSum);
-    const balance = creditSum - debitsSum;
+
+    let debitSum:number;
+    let creditSum:number;
+    if (debitArray.length===0){
+      debitSum= 0;
+    } else{
+      debitSum = debitArray.reduce(reducer);
+    }
+    if (creditArray.length===0){
+      creditSum= 0;
+    } else{
+      creditSum = creditArray.reduce(reducer);
+    }
+
+    const balance = creditSum - debitSum;
 
     return balance;
   }

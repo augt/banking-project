@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+  UseGuards,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -12,10 +23,10 @@ export class AccountsController {
   @UseGuards(JwtAuthGuard)
   @Post('create')
   async createAccount(@Request() req) {
-     const newAccount = await this.accountsService.createAccount(req);
-      return newAccount;
+    const newAccount = await this.accountsService.createAccount(req);
+    return newAccount;
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOneAccount(@Request() req, @Param('id') id: string) {
@@ -23,17 +34,31 @@ export class AccountsController {
     if (account.user.id !== req.user.id) {
       throw new UnauthorizedException();
     }
-    const balance = await this.accountsService.calculateAccountBalance(account)
+    const balance = await this.accountsService.calculateAccountBalance(account);
     const fixedPointBalance = balance.toFixed(2);
-    return {your_account_id: account.id, balance:fixedPointBalance } ;
+    return { your_account_id: account.id, balance: fixedPointBalance };
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAllAccounts(@Request() req): Promise<Account[]> {
-    return this.accountsService.findAll(req);
+  async findAllAccounts(@Request() req) {
+    const accountsArray: Account[] = await this.accountsService.findAll(req);
+
+    const accountsListWithBalance = [];
+    for (let account of accountsArray) {
+      const balance = await this.accountsService.calculateAccountBalance(
+        account,
+      );
+      const fixedPointBalance = balance.toFixed(2);
+      const accountInfos = {
+        account_id: account.id,
+        balance: fixedPointBalance+"€",
+      };
+      accountsListWithBalance.push(accountInfos);
+    }
+
+    return accountsListWithBalance;
   }
-  
 }
 
 /* @Post()
