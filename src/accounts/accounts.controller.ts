@@ -46,6 +46,7 @@ export class AccountsController {
     return {
       your_account_id: account.id,
       balance: fixedPointBalance,
+      blocked: account.isBlocked,
       transactions_history: transactionsArray,
     };
   }
@@ -63,6 +64,7 @@ export class AccountsController {
       const fixedPointBalance = balance.toFixed(2);
       const accountInfos = {
         account_id: account.id,
+        blocked: account.isBlocked,
         balance: fixedPointBalance + '€',
       };
       accountsListWithBalance.push(accountInfos);

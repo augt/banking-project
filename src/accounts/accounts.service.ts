@@ -26,7 +26,11 @@ export class AccountsService {
         relations: [
           'user',
           'debitMoneytransactions',
+          'debitMoneytransactions.debitedAccount',
+          'debitMoneytransactions.creditedAccount',
           'creditMoneytransactions',
+          'creditMoneytransactions.debitedAccount',
+          'creditMoneytransactions.creditedAccount',
         ],
       });
       return account;
