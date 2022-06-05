@@ -10,7 +10,14 @@ import { AuthModule } from './auth/auth.module';
 import config from 'ormconfig';
 
 @Module({
-  imports: [UsersModule, AccountsModule, InstitutionsModule, MoneytransactionsModule, TypeOrmModule.forRoot(config), AuthModule],
+  imports: [
+    UsersModule,
+    AccountsModule,
+    InstitutionsModule,
+    MoneytransactionsModule,
+    TypeOrmModule.forRoot(config),
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

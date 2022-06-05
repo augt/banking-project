@@ -7,8 +7,12 @@ import { AccountsModule } from 'src/accounts/accounts.module';
 import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Moneytransaction]), AccountsModule, UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Moneytransaction]),
+    AccountsModule,
+    UsersModule,
+  ],
   controllers: [MoneytransactionsController],
-  providers: [MoneytransactionsService]
+  providers: [MoneytransactionsService],
 })
 export class MoneytransactionsModule {}

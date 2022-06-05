@@ -1,9 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Moneytransaction } from 'src/moneytransactions/entities/moneytransaction.entity';
-import { In, JoinColumn, NotBrackets, Repository, Transaction } from 'typeorm';
-import { CreateAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
+import { In, Repository } from 'typeorm';
 import { Account } from './entities/account.entity';
 
 @Injectable()
@@ -75,8 +73,7 @@ export class AccountsService {
       const parsedDebitAmount = parseFloat(debitTransaction.amount);
       debitArray.push(parsedDebitAmount);
     }
-    console.log(creditArray)
-    console.log(debitArray)
+
     const reducer = (previousValue, currentValue) =>
       previousValue + currentValue;
 

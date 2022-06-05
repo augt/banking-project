@@ -1,9 +1,7 @@
-import { IsAlphanumeric, IsNotEmpty } from "class-validator";
+import { IsAlphanumeric, IsNotEmpty } from 'class-validator';
 
 export class CreateInstitutionDto {
-    @IsNotEmpty()
-    @IsAlphanumeric()
-    name: string;
-
-
+  @IsNotEmpty()
+  @IsAlphanumeric()
+  name: string;
 }

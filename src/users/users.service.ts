@@ -31,22 +31,20 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-
     try {
       const newUser = await this.usersRepository.create(createUserDto);
 
-    await bcrypt.hash(newUser.password, 10).then((hash) => {
-      newUser.password = hash;
-    });
+      await bcrypt.hash(newUser.password, 10).then((hash) => {
+        newUser.password = hash;
+      });
 
-    await this.usersRepository.save(newUser);
+      await this.usersRepository.save(newUser);
 
-    delete newUser.password;
-    return newUser;
+      delete newUser.password;
+      return newUser;
     } catch {
       throw new BadRequestException();
     }
-    
   }
 
   async updateUser(
@@ -76,9 +74,7 @@ export class UsersService {
       throw new NotFoundException();
     }
   }
-  
 }
-
 
 /* create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';

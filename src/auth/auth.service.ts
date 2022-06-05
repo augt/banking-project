@@ -37,33 +37,20 @@ export class AuthService {
       let payload: object;
 
       if (institution) {
-        await bcrypt.compare(body.privateKey, institution.privateKey).then((valid) => {
-          if (!valid) {
-            throw new UnauthorizedException();
-          }
-          return (payload = { sub: institution.id });
-        });
+        await bcrypt
+          .compare(body.privateKey, institution.privateKey)
+          .then((valid) => {
+            if (!valid) {
+              throw new UnauthorizedException();
+            }
+            return (payload = { sub: institution.id });
+          });
       } else {
         throw new UnauthorizedException();
       }
       return {
         access_token: this.jwtService.sign(payload),
       };
-
     }
   }
 }
-
-/* await bcrypt
-        .compare(password, user.password)
-        .then((valid) => {
-          if (!valid) {
-            throw new BadRequestException() ;
-          }
-
-          if (user && valid) {
-            const { password, ...result } = user;
-            return result;
-          }
-          return null;
-        })*/

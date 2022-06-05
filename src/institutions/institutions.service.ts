@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
@@ -48,7 +52,7 @@ export class InstitutionsService {
     req,
   ): Promise<Institution> {
     try {
-       if (req.user.id !== id) {
+      if (req.user.id !== id) {
         throw new UnauthorizedException();
       }
       const institution = await this.getOneById(id);
@@ -57,30 +61,10 @@ export class InstitutionsService {
 
       return this.institutionsRepository.save(updatedInstitution);
     } catch {
-       if (req.user.id !== id) {
+      if (req.user.id !== id) {
         throw new UnauthorizedException();
       }
       throw new NotFoundException();
     }
   }
 }
-
-/* create(createInstitutionDto: CreateInstitutionDto) {
-    return 'This action adds a new institution';
-  }
-
-  findAll() {
-    return `This action returns all institutions`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} institution`;
-  }
-
-  update(id: number, updateInstitutionDto: UpdateInstitutionDto) {
-    return `This action updates a #${id} institution`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} institution`;
-  } */

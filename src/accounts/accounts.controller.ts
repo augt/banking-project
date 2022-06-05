@@ -3,9 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   Request,
   UseGuards,
   UnauthorizedException,
@@ -13,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AccountsService } from './accounts.service';
-import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Account } from './entities/account.entity';
 
@@ -81,9 +78,13 @@ export class AccountsController {
     @Param('id') id: string,
     @Body() updateAccountDto: UpdateAccountDto,
   ) {
-    const updatedAccount = await this.accountsService.blockAccount(req, id, updateAccountDto);
-    delete updatedAccount.user
+    const updatedAccount = await this.accountsService.blockAccount(
+      req,
+      id,
+      updateAccountDto,
+    );
+    delete updatedAccount.user;
 
-    return updatedAccount
+    return updatedAccount;
   }
 }

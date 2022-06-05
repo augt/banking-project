@@ -1,16 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Institution {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({
-        type: "varchar",
-    })
-    name: string;
+  @Column({
+    type: 'varchar',
+  })
+  name: string;
 
-    @Column("varchar")
-    privateKey: string;
-
+  @Column('varchar')
+  privateKey: string;
 }
