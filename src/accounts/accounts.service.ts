@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Moneytransaction } from 'src/moneytransactions/entities/moneytransaction.entity';
 import { In, Repository } from 'typeorm';
@@ -36,7 +36,7 @@ export class AccountsService {
       return account;
     } catch (err) {
       //handle error
-      throw err;
+      throw new NotFoundException();
     }
   }
 
