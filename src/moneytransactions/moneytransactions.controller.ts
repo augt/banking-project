@@ -12,7 +12,7 @@ export class MoneytransactionsController {
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
-  async createUser(
+  async createMoneyTransaction(
     @Request() req,
     @Body() body: CreateMoneytransactionDto,
   ): Promise<Moneytransaction> {

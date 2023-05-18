@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Moneytransaction } from 'src/moneytransactions/entities/moneytransaction.entity';
 import { In, Repository } from 'typeorm';
@@ -56,8 +60,8 @@ export class AccountsService {
   }
 
   async calculateAccountBalance(account: Account) {
-    let debitArray = [];
-    let creditArray = [];
+    const debitArray = [];
+    const creditArray = [];
 
     const filteredCreditTransactionsArray =
       account.creditMoneytransactions.filter(
@@ -68,12 +72,12 @@ export class AccountsService {
         (transaction) => transaction.isCanceled === false,
       );
 
-    for (let creditTransaction of filteredCreditTransactionsArray) {
+    for (const creditTransaction of filteredCreditTransactionsArray) {
       const parsedCreditAmount = parseFloat(creditTransaction.amount);
       creditArray.push(parsedCreditAmount);
     }
 
-    for (let debitTransaction of filteredDebitTransactionsArray) {
+    for (const debitTransaction of filteredDebitTransactionsArray) {
       const parsedDebitAmount = parseFloat(debitTransaction.amount);
       debitArray.push(parsedDebitAmount);
     }
@@ -117,11 +121,10 @@ export class AccountsService {
       account.debitMoneytransactions,
     );
 
-    let transactionsIdArray: number[] = [];
+    const transactionsIdArray: number[] = [];
 
-    for (let transaction of transactionsArray) {
+    for (const transaction of transactionsArray) {
       const transactionTimeStamp = new Date(transaction.createdAt);
-      const transactionAge = Date.now() - transactionTimeStamp.getTime();
 
       if (transactionTimeStamp >= blockDate) {
         transactionsIdArray.push(transaction.id);

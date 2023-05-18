@@ -2,7 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InstitutionsService } from 'src/institutions/institutions.service';
 import { UsersService } from 'src/users/users.service';
-import bcrypt from 'bcrypt';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
