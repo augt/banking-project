@@ -1,0 +1,341 @@
+{
+	"info": {
+		"_postman_id": "1c8a8e1a-4f4b-488e-b529-d761f793860e",
+		"name": "bank-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Prenom\",\n    \"lastName\": \"Nom\",\n    \"email\": \"prenomnom@email.com\",\n    \"password\": \"supersecret\",\n    \"age\": 18\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlYmRlM2RhMy03MGEyLTQwYWYtYTFhZi1kNDNiOTcyNGQ5NzMiLCJpYXQiOjE2NTQ1MjQ4MDksImV4cCI6MTY1NDYxMTIwOX0.o-xp1ZGk4LEdPvm6-hISmrFTmUjc41fSuZGsSel8IWo",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\":\"supersecret\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/ebde3da3-70a2-40af-a1af-d43b9724d973",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"ebde3da3-70a2-40af-a1af-d43b9724d973"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"prenomnom@email.com\",\n    \"password\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "institution signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Supermarche\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/institutions/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"institutions",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "institution update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNDAxN2I4Zi0zZTgxLTQ1OTAtODg4MS1jOTMwYjM2N2RmYzkiLCJpYXQiOjE2NTQ0MjI0MzQsImV4cCI6MTY1NDUwODgzNH0.N7mST-KD0B5HJeedhrzQQTG6UpUXXOuQHvLpQW9oxbY",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Magasin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/institutions/c4017b8f-3e81-4590-8881-c930b367dfc9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"institutions",
+						"c4017b8f-3e81-4590-8881-c930b367dfc9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "institution login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"c4017b8f-3e81-4590-8881-c930b367dfc9\",\n    \"privateKey\": \"86ea29d0-5465-4cc5-adcd-415b7abd5f08\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxM2VmNmVlNi0wNzM3LTQ2NTgtYmY0Mi04NGZmNGM5OGQzZWMiLCJpYXQiOjE2NTQ0MjIyNzgsImV4cCI6MTY1NDUwODY3OH0.Lu0Td7Itd9mmkH5r9lgtGr8Rf03DFC77GIADg_9dHfk",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/accounts/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"accounts",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account find all",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxM2VmNmVlNi0wNzM3LTQ2NTgtYmY0Mi04NGZmNGM5OGQzZWMiLCJpYXQiOjE2NTQ1MTAzNTIsImV4cCI6MTY1NDU5Njc1Mn0.d8LCs4ClaBoBo7rL0-JJsfofTKj57Beu-SEFC2f_Ui0",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account find one",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxM2VmNmVlNi0wNzM3LTQ2NTgtYmY0Mi04NGZmNGM5OGQzZWMiLCJpYXQiOjE2NTQ1MTAzNTIsImV4cCI6MTY1NDU5Njc1Mn0.d8LCs4ClaBoBo7rL0-JJsfofTKj57Beu-SEFC2f_Ui0",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/accounts/580c218e-99b9-48f7-8044-de4d2cee0b6a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"accounts",
+						"580c218e-99b9-48f7-8044-de4d2cee0b6a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transactions create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxM2VmNmVlNi0wNzM3LTQ2NTgtYmY0Mi04NGZmNGM5OGQzZWMiLCJpYXQiOjE2NTQ1MTAzNTIsImV4cCI6MTY1NDU5Njc1Mn0.d8LCs4ClaBoBo7rL0-JJsfofTKj57Beu-SEFC2f_Ui0",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"debitedAccountId\": \"580c218e-99b9-48f7-8044-de4d2cee0b6a\",\n    \"creditedAccountId\": \"cae79eee-ccd3-46be-b8f7-16df15ed8f91\",\n    \"amount\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/moneytransactions/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"moneytransactions",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account block",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxM2VmNmVlNi0wNzM3LTQ2NTgtYmY0Mi04NGZmNGM5OGQzZWMiLCJpYXQiOjE2NTQ1MTAzNTIsImV4cCI6MTY1NDU5Njc1Mn0.d8LCs4ClaBoBo7rL0-JJsfofTKj57Beu-SEFC2f_Ui0",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"blockDate\": \"2022-06-05 12:00:29.251626+02\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/accounts/block/580c218e-99b9-48f7-8044-de4d2cee0b6a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"accounts",
+						"block",
+						"580c218e-99b9-48f7-8044-de4d2cee0b6a"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

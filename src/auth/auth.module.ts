@@ -7,12 +7,16 @@ import { JwtStrategy } from './jwt.strategy';
 import { InstitutionsModule } from 'src/institutions/institutions.module';
 
 @Module({
-  imports: [UsersModule,InstitutionsModule, PassportModule, JwtModule.register({
-    secret: 'SECRET', // should be in env variables
-    signOptions:{expiresIn: '86400s'}
-  })],
+  imports: [
+    UsersModule,
+    InstitutionsModule,
+    PassportModule,
+    JwtModule.register({
+      secret: 'SECRET', // should be in env variables
+      signOptions: { expiresIn: '86400s' },
+    }),
+  ],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService]
+  exports: [AuthService],
 })
 export class AuthModule {}
-
