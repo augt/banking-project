@@ -1,10 +1,13 @@
 ## Description
 
 This is a simplified banking API, built with NestJS, TypeORM, postgreSQL and Docker.
+You can quickly try the several features with the provided postman collection json file.
 
 features :
 
-- users can create and modify their user account
+- all routes except user account and institution account sign up/sign in are protected with authentication.
+
+- users can create and modify their user account.
 - users can create one or several bank accounts.
 - users can check their bank accounts' balance and last 30 money transactions history.
 - users can generate transactions between their own accounts and also make payments to other users' accounts. Any transaction that would make a bank account's balance negative is forbidden by the API.
@@ -17,8 +20,8 @@ features :
 
 require software :
 
--nodeJS
--docker
+- nodeJS
+- docker
 
 ```bash
 $ npm install
