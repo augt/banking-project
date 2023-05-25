@@ -16,6 +16,8 @@ features :
 
 - all routes except user account and institution account sign up/sign in are protected with authentication.
 
+NB: since all bank accounts are created with a balance at 0€, and the API doesn't allow transactions that would make an account's balance less than 0€, in order to be able to make the first transaction though the API, you have to create a transaction directly though an SQL query in order to have at least one account with a positive balance.
+
 ## Installation
 
 required software :
