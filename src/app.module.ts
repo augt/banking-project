@@ -7,7 +7,7 @@ import { InstitutionsModule } from './institutions/institutions.module';
 import { MoneytransactionsModule } from './moneytransactions/moneytransactions.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import config from 'ormconfig';
+import { dataSourceOptions } from '../db/data-source';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import config from 'ormconfig';
     AccountsModule,
     InstitutionsModule,
     MoneytransactionsModule,
-    TypeOrmModule.forRoot(config),
+    TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
   ],
   controllers: [AppController],

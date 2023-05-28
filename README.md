@@ -22,12 +22,13 @@ NB: since all bank accounts are created with a balance at 0€, and the API does
 
 required software :
 
-- nodeJS
-- docker
+- NodeJS
+- Docker
 
 ```bash
 $ npm install
 $ docker-compose up -d
+$ npm run migration:run
 ```
 
 ## Running the app

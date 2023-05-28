@@ -26,7 +26,8 @@ export class AccountsService {
 
   async getOneById(id: string): Promise<Account> {
     try {
-      const account = await this.accountsRepository.findOneOrFail(id, {
+      const account = await this.accountsRepository.findOneOrFail({
+        where: { id },
         relations: [
           'user',
           'debitMoneytransactions',

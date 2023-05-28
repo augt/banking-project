@@ -9,6 +9,7 @@ import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { Institution } from './entities/institution.entity';
 import { v4 as uuidv4 } from 'uuid';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
 
 @Injectable()
@@ -38,7 +39,7 @@ export class InstitutionsService {
 
   async getOneById(id: string): Promise<Institution> {
     try {
-      const institution = await this.institutionsRepository.findOne(id);
+      const institution = await this.institutionsRepository.findOneBy({ id });
       return institution;
     } catch (err) {
       //handle error
