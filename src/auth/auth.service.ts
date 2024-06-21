@@ -2,8 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InstitutionsService } from 'src/institutions/institutions.service';
 import { UsersService } from 'src/users/users.service';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcrypt');
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +18,7 @@ export class AuthService {
       let payload: object;
 
       if (user) {
-        await bcrypt.compare(body.password, user.password).then((valid) => {
+        await compare(body.password, user.password).then((valid) => {
           if (!valid) {
             throw new UnauthorizedException();
           }
@@ -38,14 +37,12 @@ export class AuthService {
       let payload: object;
 
       if (institution) {
-        await bcrypt
-          .compare(body.privateKey, institution.privateKey)
-          .then((valid) => {
-            if (!valid) {
-              throw new UnauthorizedException();
-            }
-            return (payload = { sub: institution.id });
-          });
+        await compare(body.privateKey, institution.privateKey).then((valid) => {
+          if (!valid) {
+            throw new UnauthorizedException();
+          }
+          return (payload = { sub: institution.id });
+        });
       } else {
         throw new UnauthorizedException();
       }

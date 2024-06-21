@@ -9,8 +9,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcrypt');
+import { hash } from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(
@@ -35,7 +34,7 @@ export class UsersService {
     try {
       const newUser = await this.usersRepository.create(createUserDto);
 
-      await bcrypt.hash(newUser.password, 10).then((hash) => {
+      await hash(newUser.password, 10).then((hash) => {
         newUser.password = hash;
       });
 
@@ -60,7 +59,7 @@ export class UsersService {
       const user = await this.getOneById(id);
 
       if (updateUserDto.password) {
-        await bcrypt.hash(updateUserDto.password, 10).then((hash) => {
+        await hash(updateUserDto.password, 10).then((hash) => {
           updateUserDto.password = hash;
         });
       }

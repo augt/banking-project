@@ -9,8 +9,7 @@ import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { Institution } from './entities/institution.entity';
 import { v4 as uuidv4 } from 'uuid';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcrypt');
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class InstitutionsService {
@@ -22,15 +21,14 @@ export class InstitutionsService {
   async createInstitution(
     createInstitutionDto: CreateInstitutionDto,
   ): Promise<Institution> {
-    const newInstitution = await this.institutionsRepository.create(
-      createInstitutionDto,
-    );
+    const newInstitution =
+      await this.institutionsRepository.create(createInstitutionDto);
     newInstitution.id = uuidv4();
     newInstitution.privateKey = uuidv4();
 
     const newInstitutionHashedKey = { ...newInstitution };
 
-    await bcrypt.hash(newInstitutionHashedKey.privateKey, 10).then((hash) => {
+    await hash(newInstitutionHashedKey.privateKey, 10).then((hash) => {
       newInstitutionHashedKey.privateKey = hash;
       this.institutionsRepository.save(newInstitutionHashedKey);
     });
