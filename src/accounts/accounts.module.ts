@@ -6,9 +6,12 @@ import { Account } from './entities/account.entity';
 import { Moneytransaction } from 'src/moneytransactions/entities/moneytransaction.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Account]),TypeOrmModule.forFeature([Moneytransaction])],
+  imports: [
+    TypeOrmModule.forFeature([Account]),
+    TypeOrmModule.forFeature([Moneytransaction]),
+  ],
   controllers: [AccountsController],
   providers: [AccountsService],
-  exports: [AccountsService]
+  exports: [AccountsService],
 })
 export class AccountsModule {}

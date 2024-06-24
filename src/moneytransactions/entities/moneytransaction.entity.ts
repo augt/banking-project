@@ -21,9 +21,9 @@ export class Moneytransaction {
   })
   isCanceled: boolean;
 
-  @ManyToOne((type) => Account, (account) => account.debitMoneytransactions)
+  @ManyToOne(() => Account, (account) => account.debitMoneytransactions)
   debitedAccount: Account;
 
-  @ManyToOne((type) => Account, (account) => account.creditMoneytransactions)
+  @ManyToOne(() => Account, (account) => account.creditMoneytransactions)
   creditedAccount: Account;
 }

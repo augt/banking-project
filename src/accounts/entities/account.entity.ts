@@ -19,17 +19,17 @@ export class Account {
   })
   isBlocked: boolean;
 
-  @ManyToOne((type) => User, (user) => user.accounts)
+  @ManyToOne(() => User, (user) => user.accounts)
   user: User;
 
   @OneToMany(
-    (type) => Moneytransaction,
+    () => Moneytransaction,
     (transaction) => transaction.debitedAccount,
   )
   debitMoneytransactions: Moneytransaction[];
 
   @OneToMany(
-    (type) => Moneytransaction,
+    () => Moneytransaction,
     (transaction) => transaction.creditedAccount,
   )
   creditMoneytransactions: Moneytransaction[];

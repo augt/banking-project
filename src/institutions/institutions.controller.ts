@@ -21,9 +21,8 @@ export class InstitutionsController {
   async createInstitution(
     @Body() body: CreateInstitutionDto,
   ): Promise<Institution> {
-    const newInstitution = await this.institutionsService.createInstitution(
-      body,
-    );
+    const newInstitution =
+      await this.institutionsService.createInstitution(body);
     return newInstitution;
   }
 
@@ -34,7 +33,7 @@ export class InstitutionsController {
     @Body() updateInstitutionDto: UpdateInstitutionDto,
     @Request() req,
   ) {
-    const institution = await this.institutionsService.updateInstitution(
+    await this.institutionsService.updateInstitution(
       id,
       updateInstitutionDto,
       req,

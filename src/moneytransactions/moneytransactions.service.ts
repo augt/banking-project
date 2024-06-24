@@ -54,9 +54,8 @@ export class MoneytransactionsService {
     if (user && debitedAccount.user.id !== req.user.id) {
       throw new UnauthorizedException();
     }
-    const formerBalance = await this.accountsService.calculateAccountBalance(
-      debitedAccount,
-    );
+    const formerBalance =
+      await this.accountsService.calculateAccountBalance(debitedAccount);
     const floatTransactionAmount = parseFloat(newMoneytransaction.amount);
     const expectedNewBalance = formerBalance - floatTransactionAmount;
 

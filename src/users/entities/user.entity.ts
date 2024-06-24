@@ -32,6 +32,6 @@ export class User {
   })
   age: number;
 
-  @OneToMany((type) => Account, (account) => account.user)
+  @OneToMany(() => Account, (account) => account.user)
   accounts: Account[];
 }
