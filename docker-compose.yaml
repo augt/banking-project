@@ -1,9 +1,9 @@
 services:
   bank-db:
-    image: postgres:14-alpine
+    image: postgres
     environment:
       - POSTGRES_DB=bankingproject
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
