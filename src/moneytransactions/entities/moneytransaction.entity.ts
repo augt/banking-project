@@ -13,7 +13,7 @@ export class Moneytransaction {
   amount: string;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: string;
+  createdAt: Date;
 
   @Column({
     type: 'boolean',
