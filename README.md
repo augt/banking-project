@@ -27,7 +27,7 @@ required software :
 
 ```bash
 $ npm install
-$ docker-compose up -d
+$ docker compose up -d
 $ npm run migration:run
 ```
 
